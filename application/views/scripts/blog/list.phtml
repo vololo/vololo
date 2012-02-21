@@ -1,0 +1,30 @@
+<?php
+
+if (count($this->data)) {
+
+?>
+<div class="pane pane_portfolio">
+	<h2>Записи блога</h2>
+	<table>
+<?php
+
+
+
+	foreach ($this->data as $n => $el) {
+
+
+?>
+	<tr<?php echo $n == count($this->data) - 1 ? ' class="last"' : '' ?>>
+		<td class="f"><h4><a href="<?php echo $el->url_valid ?>" title="Смотреть информацию о статье"><?php echo $el->title_valid ?></a></h4></td>
+		<td class="date l" title="Дата публикации"><?php echo $el->date_create_valid ?></td>
+	</tr>
+<?php
+
+	}
+
+?>
+	</table>
+</div>
+<?php
+
+}

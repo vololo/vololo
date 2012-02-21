@@ -1,0 +1,24 @@
+<?php
+
+if ($this->data) {
+
+?>
+<h3><?php echo $this->title ?></h3>
+<div style="padding:0 0 0 20px;">
+<?php
+
+	foreach ($this->data as $n => $el) {
+		$description = Vololo_Common::truncateText($el->message, 300, true);
+
+?>
+<h4><a href="<?php echo $el->src ?>"><?php echo $el->title ?></a></h4>
+<p><?php echo $el->date_valid ?> / <?php echo $el->studia_title ?></p>
+<p><?php echo $description ?></p>
+<?php
+
+	}
+?>
+</div>
+<?php
+
+}

@@ -1,0 +1,37 @@
+<?php
+
+if (count($this->data)) {
+	if (trim($this->data[0]->message)) $this->people .= ($this->people ? '. ' : '').$this->data[0]->message;
+
+?>
+<div class="vote<?php echo $this->user->IsAuthorization() ? '' : ' disabled' ?>" value="<?php echo $this->data[0]->value ?>" value_avg="<?php echo $this->data[0]->value_avg ?>" message_avg="<?php echo htmlspecialchars($this->data[0]->message_avg) ?>" type="<?php echo $this->data[0]->type ?>">
+<?php
+	if ($this->data[0]->type == 'content') $type = 'Содержание';
+	elseif ($this->data[0]->type == 'navigation') $type = 'Навигация';
+	elseif ($this->data[0]->type == 'design') $type = 'Дизайн';
+	else $type = 'Неизвестно';
+
+?>
+	<div>
+<?php
+
+	foreach ($this->data as $n => $el) {
+
+
+?>
+		<a onclick="return false" href="#" title="<?php echo $el->id ?>"></a>
+<?php
+
+	}
+
+?>
+	</div>
+<?php
+
+	echo $type;
+
+?>
+</div>
+<?php
+
+}

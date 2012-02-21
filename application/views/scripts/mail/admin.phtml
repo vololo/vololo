@@ -1,0 +1,24 @@
+<?php
+
+if ($this->post) {
+	$this->mail(array(
+		'subject' => 'Письмо с сайта',
+		'from' => 'site@vololo.ru',
+		'from_name' => 'Vololo.ru',
+		'to' => 'info@vololo.ru',
+		'view' => 'amail',
+		'message' => @$this->post['message']
+	));
+	$this->layout()->disableLayout(true);
+}
+else {
+
+?>
+<div class="admin"><form id="ad" method="post" action=""><div>
+	<textarea name="message" id="ad_message" placeholder="Сообщение Васе Вололошину" cols="10" rows="3"></textarea>
+	<input id="ad_button" type="submit" value="Отправить" />
+	<div class="c"></div>
+</div></form></div>
+<?php
+
+}

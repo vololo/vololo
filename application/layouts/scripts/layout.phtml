@@ -1,0 +1,67 @@
+<?php
+
+$this	->headScript()
+		->offsetSetFile(1, '/g/js/jquery/jquery.js')
+		->offsetSetFile(2, '/g/ctl/multiselect/jquery.multiSelect.js')
+		->offsetSetFile(100, '/j/main.js');
+
+$this	->headLink()
+		->offsetSetAlternate(150, array('rel' => 'favicon', 'href' => '/favicon.ico'))
+		->offsetSetStylesheet(1, '/g/img/reset.css', 'all')
+		->offsetSetStylesheet(2, '/i/icon.css', 'all')
+		->offsetSetStylesheet(3, '/g/ctl/multiselect/jquery.multiSelect.css', 'all')
+		->offsetSetStylesheet(100, '/i/main.css', 'all');
+
+$this	->headMeta('text/html;charset=utf-8', 'content-type', 'http-equiv')
+		->headMeta('волгоград, сайт, студия, портфолио, блог', 'keywords')
+		->headMeta('Сайт для волгоградских веб-разработчиков', 'description');
+
+$this	->headTitle('Волгоградская веб-разработка', 'PREPEND')->setSeparator(' - ');
+
+echo $this->doctype('XHTML11');
+
+$head = str_replace("\n", '', $this->headMeta().$this->headTitle().$this->linkSingle(/*'s'*/));
+$shout = trim($this->txt('txt_shout'));
+
+?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+	<head><?php echo $head ?></head>
+	<body>
+		<div class="wrapper"><div class="padding">
+			<div class="head">
+				<div class="left">
+					<a href="/" class="logo" title="На главную">ВОЛОЛО</a>
+					<span class="slogan">Навигатор волгоградской веб-разработки</span>
+				</div>
+				<ul class="right">
+					<li><a href="/about">Что такое ВОЛОЛО?</a></li>
+					<li><a href="/blog" title="Читать блог проекта">Блог</a></li>
+				</ul>
+				<div class="c"></div>
+			</div>
+			<div class="left">
+				<?php echo $shout && @$_SERVER['REQUEST_URI'] == '/' ? '<div class="shout">'.$shout.'</div>' : ''?>
+				<?php echo $this->layout()->content ?>
+			</div>
+			<div class="right">
+				<?php echo $this->zlist(array(
+					'fetch_model' => 'commentonline',
+					'fetch_method' => 'ipane',
+					'view_script' => 'commentonline/ipanelist'
+				)) ?>
+				<div class="w">
+					<?php echo $this->render('rss/subscribe.phtml') ?>
+					<?php echo $this->zlist(array(
+						'fetch_model' => 'studia',
+						'fetch_method' => 'ipane',
+						'view_script' => 'studia/ipanelist'
+					)) ?>
+				</div>
+				<?php echo $this->render('mail/admin.phtml') ?>
+				<div class="counter"><!--LiveInternet counter--><script type="text/javascript">document.write("<a href='http://www.liveinternet.ru/click' target=_blank><img src='//counter.yadro.ru/hit?t25.6;r" + escape(document.referrer) + ((typeof(screen)=="undefined")?"":";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?screen.colorDepth:screen.pixelDepth)) + ";u" + escape(document.URL) +";i" + escape("Жж"+document.title.substring(0,80)) + ";" + Math.random() + "' border=0 width=88 height=15 alt='' title='LiveInternet: показано число посетителей за сегодня'><\/a>")</script><!--/LiveInternet--></div>
+			</div>
+			<div class="c"></div>
+		</div></div>
+		<?php echo $this->headSingle('s').$this->inlineSingle() ?>
+	</body>
+</html>

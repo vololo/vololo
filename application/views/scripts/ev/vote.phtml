@@ -1,0 +1,21 @@
+<?php
+
+$this->layout()->disableLayout(true);
+$this->render('ev/livestreet.phtml');
+
+$d = array(
+	'value' => 0,
+	'value_avg' => 0,
+	'message' => ''
+);
+
+if ($this->user->IsAuthorization()) {
+	$model = new Default_Model_Evvote();
+	$user = (int)$this->user->GetUserCurrent()->getId();
+	$model->vote($this->id, $user, $this->type, $this->value, $this->message);
+	$vote = $model->fetchCard($this->id, $user, $this->type);
+	if ($vote) $d['value'] = $vote->value;
+	$d['value_avg'] = $model->fetchAvg($this->id, $this->type);
+	if ($vote) $d['message'] = $vote->message;
+}
+echo $this->json($d);

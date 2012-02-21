@@ -1,0 +1,8 @@
+.i { display:block; width: 16px; height: 16px; background: url(icon.png) no-repeat; }
+.i-home { background-position: 0 0; }
+.i-adown { background-position: -16px 0; }
+.i-star { background-position: -32px 0; }
+.i-staroff { background-position: -48px 0; }
+.i-homeoff { background-position: -64px 0; }
+.i-extlink { background-position: -80px 0; }
+.i-extlinkoff { background-position: -96px 0; }

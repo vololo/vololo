@@ -1,0 +1,34 @@
+<?php
+
+if (count($this->data)) {
+
+?>
+<div class="pane pane_portfolio">
+	<h2>Последние работы волгоградских студий</h2>
+	<table>
+<?php
+
+
+
+	foreach ($this->data as $n => $el) {
+
+
+?>
+	<tr<?php echo $n == count($this->data) - 1 ? ' class="last"' : '' ?>>
+		<td class="f"><h4><a href="<?php echo $el->url_valid ?>" title="Смотреть подробнее"><?php echo $el->title_valid ?></a></h4></td>
+		<td class="new"><span<?php echo $el->is_new ? ' title="Новинка"' : '' ?> class="i i-star<?php echo $el->is_new ? '' : 'off' ?>"></span></td>
+		<td class="home"><a href="<?php echo $el->url_valid ?>" title="Смотреть в портфолио студии" target="_blank" class="i i-home"></a></td>
+		<td class="ext"><?php echo $el->url ? '<a href="'.$el->url_full.'" title="Перейти на сайт" target="_blank" class="i i-extlink"></a>' : '<span class="i i-extlinkoff"></span>' ?></td>
+		<td class="studia"><a href="<?php echo $el->studia_url ?>" title="Смотреть информацию о студии"><?php echo $el->studia_title ?></a></td>
+		<td class="date l" title="Дата попадания в портфолио"><?php echo rtrim($el->date_valid, '0123456789 ') ?></td>
+	</tr>
+<?php
+
+	}
+
+?>
+	</table>
+</div>
+<?php
+
+}

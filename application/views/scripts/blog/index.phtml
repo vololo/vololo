@@ -1,0 +1,37 @@
+<?php
+
+$model = new Default_Model_Blog();
+$card = $model->fetchCard($this->id);
+
+if ($card) {
+	$cv = $this->override()->overrideSingle($card, 'blog');
+	$this->headTitle($cv->studia_title);
+	$this->headTitle($cv->title);
+	$message = Vololo_Common::truncateText($cv->message, 500, true);
+
+?>
+<h1><a href="<?php echo $cv->studia_url ?>" title="Смотреть информацию о студии"><?php echo $cv->studia_title ?></a> / <?php echo $cv->title ?></h1>
+<noindex>
+	<?php echo $cv->date_create_valid || $cv->author
+		?	'<div class="tmeta"><div>'.
+			($cv->author ? 'автор: '.$cv->author : '').
+			($cv->date_create_valid && $cv->author ? ', ' : '').
+			($cv->date_create_valid ? 'опубликовано: '.$cv->date_create_valid : '').
+			'</div></div>'
+		:	''
+	?>
+	<?php echo $message ?>
+	<div class="bmore"><a href="<?php echo $cv->src ?>" target="_blank" title="Читать далее в блоге студии">читать далее в блоге студии</a></div>
+</noindex>
+<div class="pane pane_comment">
+	<h2>Комментарии</h2>
+	<script src="http://comment.saastools.ru/s/comment.js" type="text/javascript"></script>
+	<script type="text/javascript">comment.init({
+		domain: 'vololo',
+		key: 'blog_<?php echo $cv->id ?>'
+	});</script>
+</div>
+<?php
+
+}
+else throw new Zend_Controller_Action_Exception(404);

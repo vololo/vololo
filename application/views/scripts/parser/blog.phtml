@@ -1,0 +1,52 @@
+<?php
+
+$this->layout()->disableLayout(true);
+
+$model = new Default_Model_Blog();
+$model_s = new Default_Model_Studia();
+$model_p = new Default_Model_Parser();
+
+$list = $model_s->fetchNotBlogParsed();
+
+$model->update(array('active' => 0), '`parsed` = 1 AND UNIX_TIMESTAMP(`parsed`) + 86400 * 5 < UNIX_TIMESTAMP(NOW())');
+
+if (count($list)) {
+	$new = $news = array();
+	set_time_limit(3600);
+	foreach ($list as $el) {
+		if ($el->src_blog) $items_new = $model_p->parseRss($el->src_blog);
+		else $items_new = false;
+		if ($items_new === false) $items_new = $model_p->{'parseBlog'.ucfirst($el->stitle)}();
+		$model_s->update(array('parsed_blog' => date('Y-m-d H:i:s')), array('`id` = ?' => $el->id));
+		if ($items_new == 'next') continue;
+		if ($items_new && count($items_new)) {
+			foreach ($items_new as $item) {
+				$item['parentid'] = $el->id;
+				$item['parsed'] = date('Y-m-d H:i:s');
+				$item['active'] = 1;
+				$exist = $model->fetchByOid($el->id, $item['oid']);
+				if ($exist) $model->update($item, array('`id` = ?' => $exist->id));
+				else {
+					$ok = $model->insert($item);
+					if ($ok) {
+						$new[] = $ok;
+						if (!in_array($el->id, $news)) $news[] = $el->id;
+					}
+				}
+			}
+		}
+	}
+	if ($new && $news) {
+		$this->partial('twitter/send.phtml', array(
+			'items' => array(
+				'blog' => $new
+			)
+		));
+		$this->partial('mail/send.phtml', array(
+			'items' => array(
+				'blog' => $new
+			),
+			'studios' => $news
+		));
+	}
+}

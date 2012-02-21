@@ -1,0 +1,37 @@
+<?php
+
+$this->layout()->disableLayout(true);
+
+if ($this->items) {
+	$mt = new Default_Model_Type();
+
+	$types = array_keys($this->items);
+	$types_list = $mt->fetchList($types);
+
+	if (count($types_list)) {
+		$model_t = new Default_Model_Twitter();
+		foreach ($types_list as $el) {
+			$model = 'Default_Model_'.ucfirst($el->stitle);
+			$model = new $model();
+			$list = $model->fetchTwitter($this->items[$el->stitle]);
+			if (count($list)) {
+				$lv = $this->override($list);
+				foreach ($lv as $item) {
+					$len = 140 - (31 + strlen($item->studia_title));
+					$m = $item->studia_title.' ';
+					if ($el->stitle == 'portfolio') $m .= 'сделали ';
+					else if ($el->stitle == 'blog') $m .= 'написали ';
+					$m .= substr($item->title, 0, $len);
+					$c = file_get_contents('http://api.bit.ly/v3/shorten?login=vololo&apiKey=R_1fab340747649a3a1d73b7291ed68474&longUrl='.urlencode($item->src).'&format=json');
+					if ($c) {
+						$c = Zend_Json::decode($c);
+						if ($c['status_code'] == 200) {
+							$m .= " ".$c['data']['url'];
+						}
+					}
+					$model_t->update($m);
+				}
+			}
+		}
+	}
+}

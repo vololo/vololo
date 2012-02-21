@@ -1,0 +1,39 @@
+<?php
+
+$this->layout()->disableLayout(true);
+
+$model = new Default_Model_Rss();
+$list = $model->fetchList($this->type, $this->studia);
+
+$entries = array();
+
+if ($list) {
+	$lv = $this->override($list, 'rss');
+	foreach ($lv as $el) {
+		$entries[] = array(
+			'title'       => $el->title,
+			'link'        => $el->src ? $el->src : 'http://vololo.ru',
+			'description' => $el->message,
+			'lastUpdate' => strtotime($el->date),
+			'author' => $el->studia_title
+		);
+	}
+}
+
+$rss = array(
+	'title'   => 'Vololo.ru',
+	'generator' => 'vololo.ru',
+	'link'    => 'http://vololo.ru',
+	'description' => 'Лента vololo.ru',
+	'charset' => 'UTF-8',
+	'language' => 'ru-ru',
+	'managingEditor' => 'info@vololo.ru',
+	'webMaster' => 'info@vololo.ru',
+	'lastUpdate' => $entries ? $entries[0]['lastUpdate'] : null,
+	'entries' => $entries
+);
+
+$feed = Zend_Feed::importArray($rss, 'rss');
+$rssFeed = $feed->saveXML();
+
+echo $rssFeed;

@@ -1,0 +1,21 @@
+<div class="subscribe"><form id="sb" method="post" action=""><div>
+	<select id="sb_src">
+		<option value="">Будь в курсе</option>
+		<option value="rss">RSS</option>
+		<option value="twitter">Twitter</option>
+		<option value="mail">E-mail рассылка</option>
+	</select>
+	<input maxlength="100" type="text" name="mail" id="sb_mail" placeholder="Ваш e-mail" />
+	<select id="sb_type">
+		<option value="portfolio">Портфолио</option>
+		<option value="blog">Блоги</option>
+	</select>
+	<select id="sb_studia">
+		<?php echo $this->zlist(array(
+			'fetch_model' => 'studia',
+			'fetch_method' => 'olist'
+		)) ?>
+	</select>
+	<input id="sb_button" type="submit" value="Подписаться" />
+	<div class="c"></div>
+</div></form><div id="sb_result"></div></div>

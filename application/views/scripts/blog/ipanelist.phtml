@@ -1,0 +1,34 @@
+
+<?php
+
+if (count($this->data)) {
+
+?>
+<div class="pane pane_portfolio">
+	<h2>Последние записи блогов волгоградских студий</h2>
+	<table>
+<?php
+
+
+
+	foreach ($this->data as $n => $el) {
+
+
+?>
+	<tr<?php echo $n == count($this->data) - 1 ? ' class="last"' : '' ?>>
+		<td class="f"><h4><a href="<?php echo $el->url_valid ?>" title="Смотреть подробнее"><?php echo $el->title_valid ?></a></h4></td>
+		<td class="new"><span<?php echo $el->is_new ? ' title="Новинка"' : '' ?> class="i i-star<?php echo $el->is_new ? '' : 'off' ?>"></span></td>
+		<td class="ext"><a href="<?php echo $el->src ?>" title="Читать в блоге студии" target="_blank" class="i i-extlink"></a></td>
+		<td class="blog"><a href="<?php echo $el->studia_url ?>" title="Смотреть информацию о студии"><?php echo $el->studia_title ?></a></td>
+		<td class="date l" title="Дата публикации"><?php echo rtrim($el->date_create_valid, '0123456789 ') ?></td>
+	</tr>
+<?php
+
+	}
+
+?>
+	</table>
+</div>
+<?php
+
+}

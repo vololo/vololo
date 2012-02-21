@@ -1,0 +1,143 @@
+<?php
+
+$admin = (int)$this->user()->isAllowed(
+	$this->user('role'),
+	Vololo_Common::getById(array(
+		'model' => new Default_Model_Cresource(),
+		'field' => 'id',
+		'key' => 'key',
+		'id' => 'admin'
+	))
+);
+
+$this->control(array(
+	'static_field' => true,
+	'field' => array(
+		'title' => array(
+			'title' => 'Заголовок',
+			'required' => true,
+			'sortable' => true,
+			'order' => 1
+		),
+		'stitle' => array(
+			'title' => 'Псевдоним',
+			'unique' => true,
+			'required' => true,
+			'formatter' => 'function',
+			'formatoptions' => 'return Number(data.cedit) || '.$admin.' ? "/page/<strong>" + data.stitle + "</strong>" : "";',
+			'sortable' => true,
+			'validators' => array(array(
+				'validator' => 'Regex',
+				'options' => array('/^[a-z0-9\_\-]*$/i')
+			)),
+			'order' => 2
+		),
+		'message' => array(
+			'title' => 'Текст',
+			'type' => 'mce',
+			'required' => true,
+			'order' => 3
+		),
+		'cedit' => array(
+			'title' => 'Можно редактировать',
+			'type' => 'select',
+			'width' => '70',
+			'align' => 'center',
+			'formatter' => 'checkbox',
+			'formatoptions' => array('disabled' => false),
+			'live' => true,
+			'param' => array(
+				'multioptions' => array('1' => 'Да', '0' => 'Нет')
+			),
+			'order' => 4
+		)
+	),
+	'action_config' => array(
+		'ctlshow' => array(
+			'field' => array(
+				'message' => array(
+					'active' => false
+				),
+				'cedit' => array(
+					'hidden' => $admin ? false : true
+				)
+			)
+		),
+		'ctladd' => array(
+			'field' => array(
+				'stitle' => array(
+					'active' => $this->user()->isAllowed(
+						$this->user('role'),
+						Vololo_Common::getById(array(
+							'model' => new Default_Model_Cresource(),
+							'field' => 'id',
+							'key' => 'key',
+							'id' => 'admin'
+						))
+					)
+				),
+				'cedit' => array(
+					'active' => $this->user()->isAllowed(
+						$this->user('role'),
+						Vololo_Common::getById(array(
+							'model' => new Default_Model_Cresource(),
+							'field' => 'id',
+							'key' => 'key',
+							'id' => 'admin'
+						))
+					)
+				)
+			)
+		),
+		'ctledit' => array(
+			'static_field' => $this->user()->isAllowed(
+				$this->user('role'),
+				Vololo_Common::getById(array(
+					'model' => new Default_Model_Cresource(),
+					'field' => 'id',
+					'key' => 'key',
+					'id' => 'admin'
+				))
+			) || (int)$this->control()->config->model->fetchOne('cedit', array('`id` = ?' => @(int)$this->control()->config->param['id'])),
+			'field' => array(
+				'stitle' => array(
+					'active' => $this->user()->isAllowed(
+						$this->user('role'),
+						Vololo_Common::getById(array(
+							'model' => new Default_Model_Cresource(),
+							'field' => 'id',
+							'key' => 'key',
+							'id' => 'admin'
+						))
+					) || (int)$this->control()->config->model->fetchOne('cedit', array('`id` = ?' => @(int)$this->control()->config->param['id']))
+				),
+				'cedit' => array(
+					'active' => $this->user()->isAllowed(
+						$this->user('role'),
+						Vololo_Common::getById(array(
+							'model' => new Default_Model_Cresource(),
+							'field' => 'id',
+							'key' => 'key',
+							'id' => 'admin'
+						))
+					)
+				)
+			)
+		),
+		'ctldelete' => array(
+			'func_check' => 'php_function:
+if (!(int)$control->config->data->cedit && !(int)"'.$this->user()->isAllowed(
+		$this->user('role'),
+		Vololo_Common::getById(array(
+			'model' => new Default_Model_Cresource(),
+			'field' => 'id',
+			'key' => 'key',
+			'id' => 'admin'
+		))
+	).'") {
+	$control->config->skip = true;
+	$control->config->info[] = "Запрешено удалять страницу \"".$control->config->data->title."\"";
+}'
+		)
+	)
+));

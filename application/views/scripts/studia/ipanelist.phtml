@@ -1,0 +1,22 @@
+<?php
+
+if (count($this->data)) {
+
+?>
+<h2>Студии</h2>
+<ul class="studia_list">
+<?php
+
+	foreach ($this->data as $n => $el) {
+
+?>
+	<li<?php echo $n % 2 ? ' class="odd"' : '' ?>><span<?php echo $el->class ? ' class="'.$el->class.'"' : '' ?><?php echo $el->class_title ? ' title="'.$el->class_title.'"' : '' ?>></span><a class="i i-extlink" href="<?php echo $el->url ?>" title="Перейти на сайт студии" target="_blank"></a><a class="ll" href="<?php echo $el->url_valid ?>" title="Смотреть информацию о студии"><?php echo $el->title ?></a></li>
+<?php
+
+	}
+
+?>
+</ul>
+<?php
+
+}

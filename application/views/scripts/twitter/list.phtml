@@ -1,0 +1,28 @@
+<?php
+
+if ($this->data) {
+
+?>
+<ul class="twi">
+<?php
+
+	foreach ($this->data as $n => $el) {
+		$m = $el->message;
+		//$m = trim(str_replace('#vololo', '', $el->message));
+		$p = explode(' ', $m);
+		foreach ($p as &$el1) {
+			if (stripos($el1, 'http://') !== false) $el1 = '<a href="'.$el1.'" target="_blank">'.$el1.'</a>';
+		}
+		$m = implode(' ', $p);
+
+?>
+	<li class="size_<?php echo $n + 1 ?>"><a target="_blank" href="http://twitter.com/<?php echo $el->from_user ?>"><?php echo $el->from_user ?></a>&nbsp;→ <?php echo $m ?></li>
+<?php
+
+	}
+
+?>
+</ul>
+<?php
+
+}

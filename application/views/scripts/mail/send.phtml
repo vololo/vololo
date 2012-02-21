@@ -1,0 +1,53 @@
+<?php
+
+$this->layout()->disableLayout(true);
+
+if ($this->items && $this->studios) {
+	$mt = new Default_Model_Type();
+
+	$types = array_keys($this->items);
+	$types_list = $mt->fetchList($types);
+
+	if (count($types_list)) {
+		$model = new Default_Model_Mail();
+		$list = $model->fetchSubscribers($types, $this->studios);
+
+		$this->placeholder('message')->captureStart();
+
+?>
+<p>На сайте vololo.ru обновления:</p>
+<?php
+
+		foreach ($types_list as $el) {
+			$this->title = $el->title;
+			echo $this->zlist(array(
+				'fetch_model' => $el->stitle,
+				'fetch_method' => 'mail',
+				'fetch_param' => array($this->items[$el->stitle])
+			));
+		}
+
+?>
+<p>&nbsp;</p>
+<p>--------------------------------------</p>
+<p>Для отписки от обновлений перейдите по <a href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/mail/unsubscribe/{mail}">ссылке</a>.</p>
+<?php
+
+		$this->placeholder('message')->captureEnd();
+
+		if (count($list)) {
+			$lv = $this->override($list);
+			foreach ($lv as $el) {
+				$mail = new Zend_Mail('utf-8');
+				$mail->setBodyHtml(str_ireplace('{mail}', base64_encode($el->title), (string)$this->placeholder('message')));
+				$mail->setFrom('info@vololo.ru', 'Vololo.ru');
+				$mail->addTo($el->title);
+				$mail->setSubject('Обновления на vololo.ru');
+				try {
+					$mail->send();
+				}
+				catch (Zend_Mail_Transport_Exception $e) {}
+			}
+		}
+	}
+}

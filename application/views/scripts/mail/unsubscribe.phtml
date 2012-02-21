@@ -1,0 +1,10 @@
+<?php
+
+$model = new Default_Model_Mail();
+$row = $model->fetchRow(array('`title` = ?' => $this->mail));
+if ($row && (int)$row->active) $model->update(array('active' => 0), array('`id` = ?' => $row->id));
+else throw new Zend_Controller_Action_Exception(500);
+
+?>
+<h1>Отписка</h1>
+<p>Адрес <?php echo $row->title ?> отписан от обновлений</p>

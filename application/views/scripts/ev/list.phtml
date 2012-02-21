@@ -1,0 +1,60 @@
+
+<?php
+
+if ($this->data) {
+	$user = $this->user->IsAuthorization() ? (int)$this->user->GetUserCurrent()->getId() : 0;
+
+?>
+<div class="pane pane_ev">
+	<h2>Электронный Волгоград <?php echo $this->year ?></h2>
+	<table>
+		<?php echo $user ? '<tr class="first">
+			<td></td>
+			<td></td>
+			<td class="vote_td">
+				<a title="Смотреть мои оценки" id="vote_my" class="active" href="#" onclick="return false">мои</a>
+				/
+				<a title="Смотреть средние оценки" id="vote_avg" href="#" onclick="return false">средние</a>
+			</td>
+			<td></td>
+		</tr>' : '' ?>
+<?php
+
+	foreach ($this->data as $n => $el) {
+		$this->people = '';
+		$v = $this->zlist(array(
+			'fetch_model' => 'evvote',
+			'fetch_method' => 'list',
+			'fetch_param' => array($el->id, $user, 'content')
+		)).
+		$this->zlist(array(
+			'fetch_model' => 'evvote',
+			'fetch_method' => 'list',
+			'fetch_param' => array($el->id, $user, 'navigation')
+		)).
+		$this->zlist(array(
+			'fetch_model' => 'evvote',
+			'fetch_method' => 'list',
+			'fetch_param' => array($el->id, $user, 'design')
+		));
+
+?>
+		<tr id="<?php echo $el->id ?>"<?php echo $n == count($this->data) - 1 ? ' class="last"' : '' ?>>
+			<td class="f"><h4><?php echo $el->url_linch ? '<a href="'.$el->url_linch.'" title="Читать линч">' : '' ?><?php echo $el->title ?><?php echo $el->url_linch ? '</a>' : '' ?><?php echo $el->message ? ' &mdash; '.$el->message : '' ?></h4><?php echo $this->people ? '<div class="people"><a href="javascript:;">Люди говорят</a><div class="invis">'.$this->people.'</div></div>' : '' ?></td>
+			<td class="ext"><a href="<?php echo $el->url ?>" title="Перейти на сайт" target="_blank" class="i i-extlink"></a></td>
+			<td class="vote_td"><?php echo $v ?></td>
+			<td class="date l" title="Дата подачи заявки"><?php echo rtrim($el->date_valid, '0123456789 ') ?></td>
+		</tr>
+<?php
+
+	}
+
+?>
+	</table>
+</div>
+<br />
+<p><strong>Зачем вам тут голосовать?</strong> <em>Во-первых</em>, всегда интересно узнать результаты альтернативного рейтинга. <em>Во-вторых</em>, если вы веб-разработчик и указали это при регистрации в блоге, можно будет составить рейтинг по оценкам ваших коллег. <em>В-третьих</em>, этот рейтинг динамично меняется по мере добавления работ участниками. <em>В-четвертых</em>, оценки можно сразу обсудить в блоге. Короче одни плюсы, голосуем :)</p>
+<?php
+
+}
+else throw new Zend_Controller_Action_Exception(404);

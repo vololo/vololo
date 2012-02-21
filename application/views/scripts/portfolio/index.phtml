@@ -1,0 +1,31 @@
+<?php
+
+$model = new Default_Model_Portfolio();
+$card = $model->fetchCard($this->id);
+
+if ($card) {
+	$cv = $this->override()->overrideSingle($card, 'portfolio');
+	$this->headTitle($cv->studia_title);
+	$this->headTitle($cv->title);
+
+?>
+<h1><a href="<?php echo $cv->studia_url ?>" title="Смотреть информацию о студии"><?php echo $cv->studia_title ?></a> / <?php echo $cv->title ?></h1>
+<noindex>
+	<?php echo $cv->url ? '<div class="tmeta"><div>адрес: <a href="'.$cv->url_full.'" title="Перейти на сайт" target="_blank">'.$cv->url.'</a></div></div>' : '' ?>
+	<?php echo $cv->date_create_valid ? '<div class="bauthor">Опубликовано: '.$cv->date_create_valid.'</div>' : '' ?>
+	<?php echo $cv->message ?>
+	<?php echo $cv->pic ? '<div class="pimage"><img alt="" src="'.$cv->pic.'" /></div>' : '' ?>
+	<div class="bmore"><a href="<?php echo $cv->src ?>" target="_blank" title="Смотреть в портфолио студии">смотреть в портфолио студии</a></div>
+</noindex>
+<div class="pane pane_comment">
+	<h2>Комментарии</h2>
+	<script src="http://comment.saastools.ru/s/comment.js" type="text/javascript"></script>
+	<script type="text/javascript">comment.init({
+		domain: 'vololo',
+		key: 'portfolio_<?php echo $cv->id ?>'
+	});</script>
+</div>
+<?php
+
+}
+else throw new Zend_Controller_Action_Exception(404);

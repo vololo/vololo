@@ -1,0 +1,29 @@
+<?php
+
+require_once PUBLIC_PATH.'/blog/config/config.php';
+require_once PUBLIC_PATH.'/blog/config/config.local.php';
+
+define('SYS_HACKER_CONSOLE',false);
+require_once PUBLIC_PATH.'/blog/engine/include/function.php';
+require_once PUBLIC_PATH.'/blog/engine/lib/internal/ConfigSimple/Config.class.php';
+
+Config::Load($config);
+Config::Set('path.root.engine', PUBLIC_PATH.'/blog/engine');
+
+require_once PUBLIC_PATH.'/blog/engine/classes/Object.class.php';
+require_once PUBLIC_PATH.'/blog/engine/classes/Engine.class.php';
+require_once PUBLIC_PATH.'/blog/engine/classes/Module.class.php';
+require_once PUBLIC_PATH.'/blog/classes/modules/user/User.class.php';
+require_once PUBLIC_PATH.'/blog/engine/modules/plugin/Plugin.class.php';
+require_once PUBLIC_PATH.'/blog/engine/modules/database/Database.class.php';
+require_once PUBLIC_PATH.'/blog/engine/modules/hook/Hook.class.php';
+require_once PUBLIC_PATH.'/blog/engine/modules/session/Session.class.php';
+require_once PUBLIC_PATH.'/blog/engine/modules/cache/Cache.class.php';
+
+require_once PUBLIC_PATH.'/blog/classes/modules/user/mapper/User.mapper.class.php';
+require_once PUBLIC_PATH.'/blog/classes/modules/user/entity/User.entity.class.php';
+require_once PUBLIC_PATH.'/blog/classes/modules/user/entity/Session.entity.class.php';
+
+$engine = Engine::getInstance();
+$this->user = new ModuleUser($engine);
+$this->user->Init();

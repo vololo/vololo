@@ -1,0 +1,31 @@
+<?php
+
+$model = new Default_Model_Studia();
+$card = $model->fetchCard($this->id);
+
+if ($card) {
+	$cv = $this->override()->overrideSingle($card, 'studia');
+	$this->headTitle($cv->title);
+?>
+<h1><?php echo $cv->title ?></h1>
+<noindex><?php echo $cv->message ?></noindex>
+<?php echo $this->zlist(array(
+	'fetch_model' => 'portfolio',
+	'fetch_param' => array($cv->id)
+)) ?>
+<?php echo $this->zlist(array(
+	'fetch_model' => 'blog',
+	'fetch_param' => array($cv->id)
+)) ?>
+<div class="pane pane_comment">
+	<h2>Комментарии</h2>
+	<script src="http://comment.saastools.ru/s/comment.js" type="text/javascript"></script>
+	<script type="text/javascript">comment.init({
+		domain: 'vololo',
+		key: 'studia_<?php echo $cv->id ?>'
+	});</script>
+</div>
+<?php
+
+}
+else throw new Zend_Controller_Action_Exception(404);

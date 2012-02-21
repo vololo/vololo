@@ -1,0 +1,11 @@
+<?php
+
+if (count($this->data)) {
+	foreach ($this->data as $n => $el) {
+
+?>
+<option value="<?php echo $el->stitle ?>"><?php echo $el->title ?></option>
+<?php
+
+	}
+}

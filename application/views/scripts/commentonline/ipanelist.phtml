@@ -1,0 +1,28 @@
+<?php
+
+if (count($this->data)) {
+
+?>
+<div class="w">
+	<h2>Прямой эфир</h2>
+	<ul class="air_list">
+<?php
+
+
+
+	foreach ($this->data as $n => $el) {
+
+
+?>
+		<li<?php echo $n % 2 ? ' class="odd"' : '' ?>><a href="<?php echo $el->url_user_valid ?>"><?php echo $el->user_stitle ?></a> → <a class="title" href="<?php echo $el->url_valid ?>" title="Читать последний комментарий"><?php echo $el->topic_title ?></a> в <span class="time" title="Время комментария"><?php echo $el->comment_date_valid ?></span> &raquo; <span class="count" title="Количество комментариев к топику"><?php echo $el->topic_count_comment ?></span></li>
+<?php
+
+	}
+
+?>
+	</ul>
+</div>
+<br />
+<?php
+
+}

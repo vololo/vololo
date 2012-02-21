@@ -1,0 +1,13 @@
+<?php
+
+$this->render('ev/livestreet.phtml');
+$this->user->Session_Set('HTTP_REFERER', '/konkurs/'.$this->year);
+
+echo	($this->user->IsAuthorization()
+			? ''
+			: '<p class="shout">Для того, чтобы оценивать сайты, <a href="/blog/login/">авторизуйтесь</a> в блоге</p>').
+		$this->zlist(array(
+			'fetch_model' => 'ev',
+			'fetch_method' => 'list',
+			'fetch_param' => array($this->year)
+		));

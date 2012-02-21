@@ -1,0 +1,19 @@
+<?php echo $this->zlist(array(
+	'fetch_model' => 'twitter',
+	'fetch_param' => array('#vololo')
+)) ?>
+<?php echo $this->zlist(array(
+	'fetch_model' => 'topic',
+	'fetch_method' => 'ipane',
+	'view_script' => 'topic/ipanelist'
+)) ?>
+<?php echo $this->zlist(array(
+	'fetch_model' => 'portfolio',
+	'fetch_method' => 'ipane',
+	'view_script' => 'portfolio/ipanelist'
+)) ?>
+<?php echo $this->zlist(array(
+	'fetch_model' => 'blog',
+	'fetch_method' => 'ipane',
+	'view_script' => 'blog/ipanelist'
+)) ?>
